@@ -1,0 +1,50 @@
+.inner {
+  align-items: center;
+  background: rgba(#fff, 0.75);
+  display: grid;
+  inset: 0;
+  left: 0;
+  padding: 12px;
+  position: fixed;
+  top: 0;
+}
+
+.fieldsetsWrapper {
+  display: grid;
+  gap: 24px;
+}
+
+.fieldset {
+  background: #fff;
+  border: 0;
+  border: 1px solid #dadce0;
+  display: flex;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.legend {
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.root {
+  display: flex;
+  gap: 12px;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 0;
+}
+
+.button {
+  background: #00a387;
+  color: #fff;
+  padding: 4px 12px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+}

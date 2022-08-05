@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "moduleResolution": "Node",
+    "outDir": "dist_openapi",
+    "sourceMap": true,
+    "target": "ES6"
+  },
+  "include": [
+    "generated/index.ts"
+  ]
+}
