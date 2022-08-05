@@ -3,6 +3,9 @@ const path = require("path");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = withPWA({
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   experimental: {
     images: {
       unoptimized: true,
