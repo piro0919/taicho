@@ -1,20 +1,22 @@
 // path: ./config/env/production/database.ts
 
-import parse = require('pg-connection-string').parse;
+import { parse } from "pg-connection-string";
+
 const config = parse(process.env.DATABASE_URL);
 
-export default ({ env }) => ({
+// eslint-disable-next-line import/no-anonymous-default-export, unused-imports/no-unused-vars
+export default ({ env }): Record<string, unknown> => ({
   connection: {
-    client: 'postgres',
+    client: "postgres",
     connection: {
-      host: config.host,
-      port: config.port,
       database: config.database,
-      user: config.user,
+      host: config.host,
       password: config.password,
+      port: config.port,
       ssl: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
       },
+      user: config.user,
     },
     debug: false,
   },
