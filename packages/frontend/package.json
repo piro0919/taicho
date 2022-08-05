@@ -7,7 +7,7 @@
     "@vespaiach/axios-fetch-adapter": "0.3.0",
     "axios": "0.27.2",
     "dayjs": "1.11.4",
-    "next": "12.2.4-canary.12",
+    "next": "12.2.4",
     "next-connect": "0.13.0",
     "next-firebase-authentication": "0.0.12",
     "next-pwa": "5.5.5",
@@ -22,7 +22,7 @@
     "react-social-login-buttons": "3.6.1",
     "react-spinners": "0.13.4",
     "ress": "5.0.2",
-    "sass": "1.54.2",
+    "sass": "1.54.3",
     "sass-mq": "6.0.0",
     "swr": "1.3.0",
     "usehooks-ts": "2.6.0"
