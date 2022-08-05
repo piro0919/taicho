@@ -4,6 +4,7 @@ import fetcher from "libs/fetcher";
 import { NextPage } from "next";
 import { useInitAuth } from "next-firebase-authentication";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactElement, ReactNode, useEffect } from "react";
 import "react-calendar/dist/Calendar.css";
@@ -36,15 +37,25 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   }, [isSignedIn, router]);
 
   return (
-    <SWRConfig
-      value={{
-        fetcher,
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-      }}
-    >
-      {getLayout(<Component {...pageProps} />)}
-    </SWRConfig>
+    <>
+      <Head>
+        <meta
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+          name="viewport"
+        />
+        <link href="/manifest.json" rel="manifest" />
+        <link href="/logo192.png" rel="apple-touch-icon" />
+      </Head>
+      <SWRConfig
+        value={{
+          fetcher,
+          revalidateIfStale: false,
+          revalidateOnFocus: false,
+        }}
+      >
+        {getLayout(<Component {...pageProps} />)}
+      </SWRConfig>
+    </>
   );
 }
 
