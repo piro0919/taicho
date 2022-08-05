@@ -30,7 +30,7 @@
     "build": "strapi build",
     "build:openapi": "npm run generate && npm run tsc",
     "develop": "strapi develop",
-    "generate": "openapi --input ./src/extensions/documentation/documentation/1.0.0/full_documentation.json --output ./generated --client axios --useOptions --useUnionTypes",
+    "generate": "openapi --input ./src/extensions/documentation/documentation/1.0.0/full_documentation.json --output ./generated --client axios --useOptions --useUnionTypes && node ./scripts/update.js",
     "start": "strapi start",
     "strapi": "strapi",
     "tsc": "rm -rf dist_openapi && tsc -p tsconfig.gen-dts.json"
