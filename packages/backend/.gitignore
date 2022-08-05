@@ -116,3 +116,5 @@ build
 # openapi
 generated/
 dist_openapi/
+
+dist/
