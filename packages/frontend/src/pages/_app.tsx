@@ -1,3 +1,4 @@
+import UserCredentialContext from "contexts/UserCredentialContext";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import fetcher from "libs/fetcher";
@@ -5,8 +6,7 @@ import { NextPage } from "next";
 import { useInitAuth } from "next-firebase-authentication";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { ReactElement, ReactNode, useEffect } from "react";
+import { ReactElement, ReactNode } from "react";
 import "react-calendar/dist/Calendar.css";
 import "ress";
 import "styles/globals.scss";
@@ -25,16 +25,7 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   const getLayout = Component.getLayout ?? ((page): ReactNode => page);
-  const router = useRouter();
-  const { isSignedIn } = useInitAuth();
-
-  useEffect(() => {
-    if (!isSignedIn) {
-      return;
-    }
-
-    router.replace("/");
-  }, [isSignedIn, router]);
+  const { userCredential } = useInitAuth();
 
   return (
     <>
@@ -53,7 +44,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
           revalidateOnFocus: false,
         }}
       >
-        {getLayout(<Component {...pageProps} />)}
+        <UserCredentialContext.Provider value={{ userCredential }}>
+          {getLayout(<Component {...pageProps} />)}
+        </UserCredentialContext.Provider>
       </SWRConfig>
     </>
   );

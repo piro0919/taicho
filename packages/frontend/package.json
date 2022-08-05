@@ -9,7 +9,7 @@
     "dayjs": "1.11.4",
     "next": "12.2.4",
     "next-connect": "0.13.0",
-    "next-firebase-authentication": "0.0.12",
+    "next-firebase-authentication": "0.0.13",
     "next-pwa": "5.5.5",
     "next-seo": "5.5.0",
     "query-string": "7.1.1",
