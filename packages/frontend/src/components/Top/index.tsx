@@ -15,7 +15,7 @@ function Top({ isOpen }: TopProps): JSX.Element {
   return (
     <Root
       className={styles.root}
-      defaultValue="tab1"
+      defaultValue="FeelingsCalendar"
       style={{ height, filter: `blur(${isOpen ? 1 : 0}px)` }}
     >
       <Content className={styles.content} value="FeelingsCalendar">
