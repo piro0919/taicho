@@ -31,7 +31,15 @@
   },
   "name": "taicho_2",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "lint": "npm-run-all --parallel lint:es lint:style",
+    "lint-staged": "npx lint-staged",
+    "lint:es": "eslint packages --ext .ts,.tsx --fix",
+    "lint:next": "next lint --fix",
+    "lint:style": "stylelint --fix '**/*.scss'",
+    "prepare": "npx husky install",
+    "prettier": "prettier --write ."
+  },
   "version": "0.1.0",
   "workspaces": [
     "packages/*"
