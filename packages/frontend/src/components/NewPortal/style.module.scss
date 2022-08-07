@@ -35,8 +35,8 @@
 .imageWrapper {
   position: relative;
   @include mq.mq($until: tablet) {
-    height: 64px;
-    width: 64px;
+    height: 52px;
+    width: 52px;
   }
   @include mq.mq($from: tablet) {
     height: 96px;
