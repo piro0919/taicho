@@ -31,9 +31,10 @@ type ExtendedPostResponse = {
   json: (body: PostConditionsData) => void;
 };
 
-const handler = nc<NextApiRequest, NextApiResponse<ExtendedGetResponse>>(
-  options
-)
+const handler = nc<
+  NextApiRequest,
+  NextApiResponse<ExtendedGetResponse | ExtendedPostResponse>
+>(options)
   .use(verifyIdTokenMiddleware)
   .get<ExtendedGetRequest, ExtendedGetResponse>(async ({ query }, res) => {
     const { data: conditions } = await fetchStrapi.get<

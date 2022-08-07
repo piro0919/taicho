@@ -1,9 +1,18 @@
 .wrapper {
+  background: var(--color-green);
+  position: relative;
+}
+
+.inner {
   align-content: center;
   align-items: center;
+  background: var(--color-white);
+  border-radius: 24px;
   display: grid;
   gap: 24px;
+  inset: 24px;
   justify-content: center;
+  position: absolute;
 }
 
 .button {

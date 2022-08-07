@@ -24,18 +24,20 @@ function SignIn({
       className={styles.wrapper}
       style={{ height, filter: `blur(${isLoading ? 1 : 0}px)` }}
     >
-      <GoogleLoginButton
-        align="center"
-        className={styles.button}
-        onClick={onSignInGoogle}
-        text="Googleでログインする"
-      />
-      <TwitterLoginButton
-        align="center"
-        className={styles.button}
-        onClick={onSignInTwitter}
-        text="Twitterでログインする"
-      />
+      <div className={styles.inner}>
+        <GoogleLoginButton
+          align="center"
+          className={styles.button}
+          onClick={onSignInGoogle}
+          text="Googleでサインインする"
+        />
+        <TwitterLoginButton
+          align="center"
+          className={styles.button}
+          onClick={onSignInTwitter}
+          text="Twitterでサインインする"
+        />
+      </div>
     </div>
   );
 }

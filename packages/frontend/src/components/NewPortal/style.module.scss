@@ -10,7 +10,9 @@
 }
 
 .fieldsetsWrapper {
-  display: grid;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 }
 
@@ -20,12 +22,26 @@
   border: 1px solid #dadce0;
   display: flex;
   justify-content: center;
+  max-width: 640px;
   padding: 0 12px;
+  width: 100%;
 }
 
 .legend {
   margin: 0 auto;
   padding: 0 12px;
+}
+
+.imageWrapper {
+  position: relative;
+  @include mq.mq($until: tablet) {
+    height: 64px;
+    width: 64px;
+  }
+  @include mq.mq($from: tablet) {
+    height: 96px;
+    width: 96px;
+  }
 }
 
 .root {
@@ -39,12 +55,13 @@
   padding: 24px 0 0;
 }
 
-.button {
-  background: #00a387;
-  color: #fff;
-  padding: 4px 12px;
+.buttonWrapper2 {
+  padding: 12px;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
-.button:disabled {
-  opacity: 0.5;
+.button {
+  display: flex;
 }

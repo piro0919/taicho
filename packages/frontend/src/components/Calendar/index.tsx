@@ -14,13 +14,16 @@ type DateType = {
 
 export type CalendarProps = Pick<
   ReactCalendarProps,
-  "onActiveStartDateChange" | "onClickDay"
+  "activeStartDate" | "onActiveStartDateChange" | "onClickDay"
 > & {
   dates: DateType[];
+  name: string;
 };
 
 function Calendar({
+  activeStartDate,
   dates,
+  name,
   onActiveStartDateChange,
   onClickDay,
 }: CalendarProps): JSX.Element {
@@ -30,9 +33,12 @@ function Calendar({
 
   return (
     <ReactCalendar
+      activeStartDate={activeStartDate}
       className={styles.calendar}
       formatDay={(_, date): string => dayjs(date).format("D")}
-      navigationLabel={({ date }): string => dayjs(date).format("YYYY年 M月")}
+      navigationLabel={({ date }): string =>
+        `${dayjs(date).format("YYYY年 M月")} ${name}`
+      }
       next2Label={null}
       nextLabel={<BsCaretRightFill size={16} />}
       onActiveStartDateChange={onActiveStartDateChange}

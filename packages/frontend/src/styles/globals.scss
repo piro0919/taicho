@@ -1,3 +1,11 @@
+@import "https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap";
+
+:root {
+  --color-gray: #dadce0;
+  --color-green: #00a387;
+  --color-white: #fff;
+}
+
 html {
   @include mq.mq($until: tablet) {
     font-size: 56.25%;
@@ -8,6 +16,7 @@ html {
 }
 
 body {
+  font-family: "Zen Maru Gothic", sans-serif;
   font-size: 1.6rem;
   letter-spacing: 1px;
   line-height: 1.75;

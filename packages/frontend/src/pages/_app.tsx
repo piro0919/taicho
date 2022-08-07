@@ -1,3 +1,5 @@
+import NoSSR from "@mpth/react-no-ssr";
+import PwaContext from "contexts/PwaContext";
 import UserCredentialContext from "contexts/UserCredentialContext";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
@@ -8,10 +10,12 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ReactElement, ReactNode } from "react";
 import "react-calendar/dist/Calendar.css";
+import { Toaster } from "react-hot-toast";
 import "ress";
 import "styles/globals.scss";
 import "styles/mq-settings.scss";
 import { SWRConfig } from "swr";
+import usePwa from "use-pwa";
 
 dayjs.locale("ja");
 
@@ -26,6 +30,13 @@ type AppPropsWithLayout = AppProps & {
 function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
   const getLayout = Component.getLayout ?? ((page): ReactNode => page);
   const { userCredential } = useInitAuth();
+  const {
+    appinstalled,
+    canInstallprompt,
+    enabledPwa,
+    isPwa,
+    showInstallPrompt,
+  } = usePwa();
 
   return (
     <>
@@ -44,10 +55,23 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
           revalidateOnFocus: false,
         }}
       >
-        <UserCredentialContext.Provider value={{ userCredential }}>
-          {getLayout(<Component {...pageProps} />)}
-        </UserCredentialContext.Provider>
+        <PwaContext.Provider
+          value={{
+            appinstalled,
+            canInstallprompt,
+            enabledPwa,
+            isPwa,
+            showInstallPrompt,
+          }}
+        >
+          <UserCredentialContext.Provider value={{ userCredential }}>
+            {getLayout(<Component {...pageProps} />)}
+          </UserCredentialContext.Provider>
+        </PwaContext.Provider>
       </SWRConfig>
+      <NoSSR>
+        <Toaster position="bottom-center" />
+      </NoSSR>
     </>
   );
 }

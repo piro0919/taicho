@@ -1,15 +1,36 @@
 import { Root, List, Trigger, Content } from "@radix-ui/react-tabs";
-import ConditionsCalendar from "components/ConditionsCalendar";
-import FeelingsCalendar from "components/FeelingsCalendar";
+import ConditionsCalendar, {
+  ConditionsCalendarProps,
+} from "components/ConditionsCalendar";
+import FeelingsCalendar, {
+  FeelingsCalendarProps,
+} from "components/FeelingsCalendar";
+import Settings from "components/Settings";
 import { BsGear, BsPerson, BsSuitHeart } from "react-icons/bs";
 import { useWindowSize } from "usehooks-ts";
 import styles from "./style.module.scss";
 
-export type TopProps = {
-  isOpen: boolean;
-};
+export type TopProps = Pick<
+  ConditionsCalendarProps,
+  "activeStartDate" | "onActiveStartDateChange" | "onClickDay"
+> &
+  Pick<
+    FeelingsCalendarProps,
+    "activeStartDate" | "onActiveStartDateChange" | "onClickDay"
+  > & {
+    conditionsDates: ConditionsCalendarProps["dates"];
+    feelingsDates: FeelingsCalendarProps["dates"];
+    isOpen: boolean;
+  };
 
-function Top({ isOpen }: TopProps): JSX.Element {
+function Top({
+  activeStartDate,
+  conditionsDates,
+  feelingsDates,
+  isOpen,
+  onActiveStartDateChange,
+  onClickDay,
+}: TopProps): JSX.Element {
   const { height } = useWindowSize();
 
   return (
@@ -19,13 +40,25 @@ function Top({ isOpen }: TopProps): JSX.Element {
       style={{ height, filter: `blur(${isOpen ? 1 : 0}px)` }}
     >
       <Content className={styles.content} value="FeelingsCalendar">
-        <FeelingsCalendar />
+        <FeelingsCalendar
+          activeStartDate={activeStartDate}
+          dates={feelingsDates}
+          onActiveStartDateChange={onActiveStartDateChange}
+          onClickDay={onClickDay}
+        />
       </Content>
       <Content className={styles.content} value="ConditionsCalendar">
-        <ConditionsCalendar />
+        <ConditionsCalendar
+          activeStartDate={activeStartDate}
+          dates={conditionsDates}
+          onActiveStartDateChange={onActiveStartDateChange}
+          onClickDay={onClickDay}
+        />
       </Content>
       {/* <Content className={styles.content} value="tab3" /> */}
-      <Content className={styles.content} value="tab4" />
+      <Content className={styles.content} value="Settings">
+        <Settings />
+      </Content>
       <List className={styles.list}>
         <Trigger className={styles.trigger} value="FeelingsCalendar">
           <BsSuitHeart size={18} />
@@ -39,7 +72,7 @@ function Top({ isOpen }: TopProps): JSX.Element {
           <BsGraphUp size={18} />
           <span>グラフ</span>
         </Trigger> */}
-        <Trigger className={styles.trigger} value="tab4">
+        <Trigger className={styles.trigger} value="Settings">
           <BsGear size={18} />
           <span>設定</span>
         </Trigger>

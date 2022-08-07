@@ -16,7 +16,7 @@ function Signout(): JSX.Element {
       return;
     }
 
-    router.replace("/signin");
+    router.replace("/");
   }, [router, isSignedOut]);
 
   return <Seo noindex={true} title="サインアウト" />;

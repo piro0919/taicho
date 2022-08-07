@@ -6,7 +6,9 @@ function Seo({ noindex, title }: SeoProps): JSX.Element {
   return (
     <NextSeo
       noindex={noindex}
-      title={title ? `${title} - たいちょ` : "たいちょ"}
+      title={
+        title ? `${title} - たいちょ` : "たいちょ - あなたの調子をサポートする"
+      }
     />
   );
 }

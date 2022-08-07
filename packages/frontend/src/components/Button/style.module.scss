@@ -1,0 +1,9 @@
+.button {
+  background: #00a387;
+  color: #fff;
+  padding: 4px 12px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+}

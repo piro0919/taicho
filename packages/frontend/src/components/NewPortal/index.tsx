@@ -1,7 +1,10 @@
 import { Root, Item, Indicator } from "@radix-ui/react-radio-group";
+import Button from "components/Button";
 import Image from "next/image";
+import { MouseEventHandler } from "react";
 import usePortal from "react-cool-portal";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { IoClose } from "react-icons/io5";
 import styles from "./style.module.scss";
 
 type FieldValues = {
@@ -10,10 +13,16 @@ type FieldValues = {
 };
 
 export type NewPortalProps = {
+  defaultValues: FieldValues;
+  onClose: MouseEventHandler<HTMLButtonElement>;
   onSubmit: SubmitHandler<FieldValues>;
 };
 
-function NewPortal({ onSubmit }: NewPortalProps): JSX.Element {
+function NewPortal({
+  defaultValues,
+  onClose,
+  onSubmit,
+}: NewPortalProps): JSX.Element {
   const { Portal } = usePortal({
     defaultShow: true,
   });
@@ -24,10 +33,7 @@ function NewPortal({ onSubmit }: NewPortalProps): JSX.Element {
     setValue,
     watch,
   } = useForm<FieldValues>({
-    defaultValues: {
-      condition: "",
-      feeling: "",
-    },
+    defaultValues,
   });
 
   return (
@@ -61,17 +67,18 @@ function NewPortal({ onSubmit }: NewPortalProps): JSX.Element {
                         <Indicator
                           {...register("feeling", { required: true })}
                         />
-                        <Image
-                          alt={value}
-                          height={64}
-                          objectFit="contain"
-                          priority={true}
-                          src={`/${value}.png`}
-                          style={{
-                            opacity: watch("feeling") === value ? 1 : 0.5,
-                          }}
-                          width={64}
-                        />
+                        <div className={styles.imageWrapper}>
+                          <Image
+                            alt={value}
+                            layout="fill"
+                            objectFit="contain"
+                            priority={true}
+                            src={`/${value}.png`}
+                            style={{
+                              opacity: watch("feeling") === value ? 1 : 0.5,
+                            }}
+                          />
+                        </div>
                       </Item>
                     </label>
                   )
@@ -101,17 +108,18 @@ function NewPortal({ onSubmit }: NewPortalProps): JSX.Element {
                       <Indicator
                         {...register("condition", { required: true })}
                       />
-                      <Image
-                        alt={value}
-                        height={64}
-                        objectFit="contain"
-                        priority={true}
-                        src={`/${value}.png`}
-                        style={{
-                          opacity: watch("condition") === value ? 1 : 0.5,
-                        }}
-                        width={64}
-                      />
+                      <div className={styles.imageWrapper}>
+                        <Image
+                          alt={value}
+                          layout="fill"
+                          objectFit="contain"
+                          priority={true}
+                          src={`/${value}.png`}
+                          style={{
+                            opacity: watch("condition") === value ? 1 : 0.5,
+                          }}
+                        />
+                      </div>
                     </Item>
                   </label>
                 ))}
@@ -119,15 +127,16 @@ function NewPortal({ onSubmit }: NewPortalProps): JSX.Element {
             </fieldset>
           </div>
           <div className={styles.buttonWrapper}>
-            <button
-              className={styles.button}
-              disabled={!isValid || isSubmitting}
-              type="submit"
-            >
+            <Button disabled={!isValid || isSubmitting} type="submit">
               保存する
-            </button>
+            </Button>
           </div>
         </form>
+        <div className={styles.buttonWrapper2}>
+          <button className={styles.button} onClick={onClose}>
+            <IoClose color="#00a387" size={36} />
+          </button>
+        </div>
       </div>
     </Portal>
   );
