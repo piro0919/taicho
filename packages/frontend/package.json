@@ -10,7 +10,7 @@
     "next": "12.2.4",
     "next-connect": "0.13.0",
     "next-firebase-authentication": "0.0.13",
-    "next-pwa": "5.5.5",
+    "next-pwa": "5.5.4",
     "next-seo": "5.5.0",
     "query-string": "7.1.1",
     "react": "18.2.0",
