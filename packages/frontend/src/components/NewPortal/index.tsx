@@ -62,7 +62,7 @@ function NewPortal({
               >
                 {["excellent", "veryGood", "good", "average", "poor"].map(
                   (value) => (
-                    <label key={value}>
+                    <label className={styles.label} key={value}>
                       <Item value={value}>
                         <Indicator
                           {...register("feeling", { required: true })}
