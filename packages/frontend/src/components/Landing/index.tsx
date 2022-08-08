@@ -17,7 +17,7 @@ function Landing(): JSX.Element {
       <div className={styles.inner}>
         <div className={styles.inner2}>
           <div className={styles.heading1Wrapper}>
-            <h1>タイチョ</h1>
+            <h1>たいちょ</h1>
           </div>
           <div className={styles.imageWrapper}>
             <div className={styles.imageWrapper2}>
@@ -30,7 +30,7 @@ function Landing(): JSX.Element {
             </div>
           </div>
           <div className={styles.textsWrapper}>
-            <p>タイチョはあなたの調子を管理してくれるサポートアプリです。</p>
+            <p>たいちょはあなたの調子を管理してくれるサポートアプリです。</p>
             <div className={styles.buttonWrapper}>
               <Button onClick={handleClick}>使ってみる</Button>
             </div>
