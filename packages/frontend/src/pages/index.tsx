@@ -243,7 +243,9 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
   );
   const handleDragEnd = useCallback<TopProps["onDragEnd"]>(
     ({ movement: [movementX] }) => {
-      if (Math.abs(movementX) < 100) {
+      console.log(Math.abs(movementX));
+
+      if (Math.abs(movementX) < 50) {
         return;
       }
 
