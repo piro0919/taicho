@@ -241,20 +241,16 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
         : [],
     [conditions2]
   );
-  const handleDragEnd = useCallback<TopProps["onDragEnd"]>(
-    ({ movement: [movementX] }) => {
-      if (Math.abs(movementX) < 50) {
-        return;
-      }
-
-      setActiveStartDate((prevActiveStartDate) =>
-        dayjs(prevActiveStartDate)
-          .add(movementX >= 0 ? -1 : 1, "month")
-          .toDate()
-      );
-    },
-    []
-  );
+  const handleSwipedLeft = useCallback<TopProps["onSwipedLeft"]>(() => {
+    setActiveStartDate((prevActiveStartDate) =>
+      dayjs(prevActiveStartDate).add(1, "month").toDate()
+    );
+  }, []);
+  const handleSwipedRight = useCallback<TopProps["onSwipedRight"]>(() => {
+    setActiveStartDate((prevActiveStartDate) =>
+      dayjs(prevActiveStartDate).add(-1, "month").toDate()
+    );
+  }, []);
 
   useEffect(() => {
     if (!conditionsIsValidating || !feelingsIsValidating) {
@@ -332,7 +328,8 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
             isOpen={isOpen}
             onActiveStartDateChange={handleActiveStartDateChange}
             onClickDay={handleClickDay}
-            onDragEnd={handleDragEnd}
+            onSwipedLeft={handleSwipedLeft}
+            onSwipedRight={handleSwipedRight}
           />
           {defaultValues && isOpen ? (
             <NewPortal

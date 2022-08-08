@@ -1,4 +1,3 @@
-import { Handler, useGesture } from "@use-gesture/react";
 import dayjs from "dayjs";
 import Image from "next/image";
 import React, { Fragment, useState } from "react";
@@ -6,6 +5,7 @@ import ReactCalendar, {
   CalendarProps as ReactCalendarProps,
 } from "react-calendar";
 import { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
+import { SwipeCallback, useSwipeable } from "react-swipeable";
 import styles from "./style.module.scss";
 
 type DateType = {
@@ -19,10 +19,8 @@ export type CalendarProps = Pick<
 > & {
   dates: DateType[];
   name: string;
-  onDragEnd: Handler<
-    "drag",
-    PointerEvent | MouseEvent | TouchEvent | KeyboardEvent
-  >;
+  onSwipedLeft: SwipeCallback;
+  onSwipedRight: SwipeCallback;
 };
 
 function Calendar({
@@ -31,17 +29,20 @@ function Calendar({
   name,
   onActiveStartDateChange,
   onClickDay,
-  onDragEnd,
+  onSwipedLeft,
+  onSwipedRight,
 }: CalendarProps): JSX.Element {
   const [value, onChange] = useState<ReactCalendarProps["value"]>(
     dayjs().toDate()
   );
-  const bind = useGesture({
-    onDragEnd,
+  const handlers = useSwipeable({
+    onSwipedLeft,
+    onSwipedRight,
+    trackMouse: true,
   });
 
   return (
-    <div {...bind()} className={styles.wrapper}>
+    <div {...handlers} className={styles.wrapper}>
       <ReactCalendar
         activeStartDate={activeStartDate}
         className={styles.calendar}

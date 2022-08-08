@@ -3,7 +3,11 @@ import Calendar, { CalendarProps } from "components/Calendar";
 
 export type ConditionsCalendarProps = Pick<
   CalendarProps,
-  "dates" | "onActiveStartDateChange" | "onClickDay" | "onDragEnd"
+  | "dates"
+  | "onActiveStartDateChange"
+  | "onClickDay"
+  | "onSwipedLeft"
+  | "onSwipedRight"
 > & {
   activeStartDate: Date;
 };
@@ -13,7 +17,8 @@ function ConditionsCalendar({
   dates,
   onActiveStartDateChange,
   onClickDay,
-  onDragEnd,
+  onSwipedLeft,
+  onSwipedRight,
 }: ConditionsCalendarProps): JSX.Element {
   return (
     <NoSSR>
@@ -23,7 +28,8 @@ function ConditionsCalendar({
         name="体調カレンダー"
         onActiveStartDateChange={onActiveStartDateChange}
         onClickDay={onClickDay}
-        onDragEnd={onDragEnd}
+        onSwipedLeft={onSwipedLeft}
+        onSwipedRight={onSwipedRight}
       />
     </NoSSR>
   );

@@ -12,11 +12,21 @@ import styles from "./style.module.scss";
 
 export type TopProps = Pick<
   ConditionsCalendarProps,
-  "activeStartDate" | "onActiveStartDateChange" | "onClickDay" | "onDragEnd"
+  | "activeStartDate"
+  | "onActiveStartDateChange"
+  | "onClickDay"
+  | "onSwipedLeft"
+  | "onSwipedRight"
 > &
   Pick<
     FeelingsCalendarProps,
-    "activeStartDate" | "onActiveStartDateChange" | "onClickDay" | "onDragEnd"
+    | "activeStartDate"
+    | "onActiveStartDateChange"
+    | "onClickDay"
+    | "onSwipedLeft"
+    | "onSwipedRight"
+    | "onSwipedLeft"
+    | "onSwipedRight"
   > & {
     conditionsDates: ConditionsCalendarProps["dates"];
     feelingsDates: FeelingsCalendarProps["dates"];
@@ -30,7 +40,8 @@ function Top({
   isOpen,
   onActiveStartDateChange,
   onClickDay,
-  onDragEnd,
+  onSwipedLeft,
+  onSwipedRight,
 }: TopProps): JSX.Element {
   const { height } = useWindowSize();
 
@@ -46,7 +57,8 @@ function Top({
           dates={feelingsDates}
           onActiveStartDateChange={onActiveStartDateChange}
           onClickDay={onClickDay}
-          onDragEnd={onDragEnd}
+          onSwipedLeft={onSwipedLeft}
+          onSwipedRight={onSwipedRight}
         />
       </Content>
       <Content className={styles.content} value="ConditionsCalendar">
@@ -55,7 +67,8 @@ function Top({
           dates={conditionsDates}
           onActiveStartDateChange={onActiveStartDateChange}
           onClickDay={onClickDay}
-          onDragEnd={onDragEnd}
+          onSwipedLeft={onSwipedLeft}
+          onSwipedRight={onSwipedRight}
         />
       </Content>
       {/* <Content className={styles.content} value="tab3" /> */}
