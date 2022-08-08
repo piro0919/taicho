@@ -12,11 +12,11 @@ import styles from "./style.module.scss";
 
 export type TopProps = Pick<
   ConditionsCalendarProps,
-  "activeStartDate" | "onActiveStartDateChange" | "onClickDay"
+  "activeStartDate" | "onActiveStartDateChange" | "onClickDay" | "onDragEnd"
 > &
   Pick<
     FeelingsCalendarProps,
-    "activeStartDate" | "onActiveStartDateChange" | "onClickDay"
+    "activeStartDate" | "onActiveStartDateChange" | "onClickDay" | "onDragEnd"
   > & {
     conditionsDates: ConditionsCalendarProps["dates"];
     feelingsDates: FeelingsCalendarProps["dates"];
@@ -30,6 +30,7 @@ function Top({
   isOpen,
   onActiveStartDateChange,
   onClickDay,
+  onDragEnd,
 }: TopProps): JSX.Element {
   const { height } = useWindowSize();
 
@@ -45,6 +46,7 @@ function Top({
           dates={feelingsDates}
           onActiveStartDateChange={onActiveStartDateChange}
           onClickDay={onClickDay}
+          onDragEnd={onDragEnd}
         />
       </Content>
       <Content className={styles.content} value="ConditionsCalendar">
@@ -53,6 +55,7 @@ function Top({
           dates={conditionsDates}
           onActiveStartDateChange={onActiveStartDateChange}
           onClickDay={onClickDay}
+          onDragEnd={onDragEnd}
         />
       </Content>
       {/* <Content className={styles.content} value="tab3" /> */}

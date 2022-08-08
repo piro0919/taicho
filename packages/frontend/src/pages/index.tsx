@@ -241,6 +241,16 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
         : [],
     [conditions2]
   );
+  const handleDragEnd = useCallback<TopProps["onDragEnd"]>(
+    ({ movement: [movementX] }) => {
+      setActiveStartDate((prevActiveStartDate) =>
+        dayjs(prevActiveStartDate)
+          .add(movementX >= 0 ? 1 : -1, "month")
+          .toDate()
+      );
+    },
+    []
+  );
 
   useEffect(() => {
     if (!conditionsIsValidating || !feelingsIsValidating) {
@@ -318,6 +328,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
             isOpen={isOpen}
             onActiveStartDateChange={handleActiveStartDateChange}
             onClickDay={handleClickDay}
+            onDragEnd={handleDragEnd}
           />
           {defaultValues && isOpen ? (
             <NewPortal

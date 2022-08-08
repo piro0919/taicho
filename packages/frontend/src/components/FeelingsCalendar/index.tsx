@@ -3,7 +3,7 @@ import Calendar, { CalendarProps } from "components/Calendar";
 
 export type FeelingsCalendarProps = Pick<
   CalendarProps,
-  "dates" | "onClickDay" | "onActiveStartDateChange"
+  "dates" | "onActiveStartDateChange" | "onClickDay" | "onDragEnd"
 > & {
   activeStartDate: Date;
 };
@@ -13,6 +13,7 @@ function FeelingsCalendar({
   dates,
   onActiveStartDateChange,
   onClickDay,
+  onDragEnd,
 }: FeelingsCalendarProps): JSX.Element {
   return (
     <NoSSR>
@@ -22,6 +23,7 @@ function FeelingsCalendar({
         name="気分カレンダー"
         onActiveStartDateChange={onActiveStartDateChange}
         onClickDay={onClickDay}
+        onDragEnd={onDragEnd}
       />
     </NoSSR>
   );
