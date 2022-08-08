@@ -1,4 +1,4 @@
-import { ConditionListResponse, FeelingListResponse } from "@taicho/api";
+import { FeelingListResponse } from "@taicho/api";
 import { useUser } from "next-firebase-authentication";
 import { GetFeelingsData } from "pages/api/feelings";
 import { stringifyUrl } from "query-string";
@@ -10,7 +10,7 @@ export type FeelingsParams = {
 
 export type FeelingsData = {
   feelings?: FeelingListResponse;
-  feelingsMutate: KeyedMutator<ConditionListResponse>;
+  feelingsMutate: KeyedMutator<FeelingListResponse>;
 };
 
 function useFeelings({ date }: FeelingsParams): FeelingsData {
