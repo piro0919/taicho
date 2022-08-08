@@ -243,9 +243,13 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
   );
   const handleDragEnd = useCallback<TopProps["onDragEnd"]>(
     ({ movement: [movementX] }) => {
+      if (Math.abs(movementX) < 100) {
+        return;
+      }
+
       setActiveStartDate((prevActiveStartDate) =>
         dayjs(prevActiveStartDate)
-          .add(movementX >= 0 ? 1 : -1, "month")
+          .add(movementX >= 0 ? -1 : 1, "month")
           .toDate()
       );
     },
