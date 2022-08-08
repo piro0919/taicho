@@ -232,7 +232,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
         <>
           <Top
             activeStartDate={activeStartDate}
-            isOpen={false}
+            isOpen={isOpen}
             onActiveStartDateChange={handleActiveStartDateChange}
             onClickDay={handleClickDay}
             onSwipedLeft={handleSwipedLeft}
