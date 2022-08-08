@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "remarks",
+  "info": {
+    "singularName": "remark",
+    "pluralName": "remarks",
+    "displayName": "Remarks"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "value": {
+      "type": "text",
+      "required": true
+    },
+    "uid": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    }
+  }
+}

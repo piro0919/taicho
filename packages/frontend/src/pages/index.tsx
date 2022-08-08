@@ -1,34 +1,23 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import NoSSR from "@mpth/react-no-ssr";
 import axios, { AxiosResponse } from "axios";
+import FormPortal, { FormPortalProps } from "components/FormPortal";
 import Landing from "components/Landing";
-import NewPortal, { NewPortalProps } from "components/NewPortal";
 import Seo from "components/Seo";
 import Top, { TopProps } from "components/Top";
 import dayjs from "dayjs";
+import useConditions from "hooks/useConditions";
+import useFeelings from "hooks/useFeelings";
 import { GetServerSideProps } from "next";
 import { useUser } from "next-firebase-authentication";
 import { verifyIdToken } from "next-firebase-authentication/dist/verifyIdToken";
-import { stringifyUrl } from "query-string";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import useSWR from "swr";
 import { useBoolean } from "usehooks-ts";
-import {
-  GetConditionsData,
-  PostConditionsBody,
-  PostConditionsData,
-} from "./api/conditions";
+import { PostConditionsData, PostConditionsBody } from "./api/conditions";
 import {
   PutConditionsIdData,
   PutConditionsIdBody,
 } from "./api/conditions/[id]";
-import {
-  GetFeelingsData,
-  PostFeelingsBody,
-  PostFeelingsData,
-} from "./api/feelings";
+import { PostFeelingsData, PostFeelingsBody } from "./api/feelings";
 import { PutFeelingsIdData, PutFeelingsIdBody } from "./api/feelings/[id]";
 
 export type PagesProps = {
@@ -36,138 +25,133 @@ export type PagesProps = {
 };
 
 function Pages({ isSignedIn }: PagesProps): JSX.Element {
-  const { user } = useUser();
+  const [activeStartDate, setActiveStartDate] = useState<
+    TopProps["activeStartDate"]
+  >(dayjs().startOf("month").toDate());
+  const handleActiveStartDateChange = useCallback<
+    NonNullable<TopProps["onActiveStartDateChange"]>
+  >(
+    ({ activeStartDate }) => {
+      setActiveStartDate(activeStartDate);
+    },
+    [setActiveStartDate]
+  );
+  const { setFalse: offIsFirst, value: isFirst } = useBoolean(true);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     dayjs().toDate()
   );
-  const {
-    data: conditions,
-    isValidating: conditionsIsValidating,
-    mutate: conditionsMutate,
-  } = useSWR<GetConditionsData>(
-    selectedDate && user?.uid
-      ? stringifyUrl({
-          query: {
-            "filters[date][$eq]": dayjs(selectedDate).format("YYYY-MM-DD"),
-            "filters[uid][$eq]": user.uid,
-          },
-          url: "/api/conditions",
-        })
-      : null
-  );
-  const {
-    data: feelings,
-    isValidating: feelingsIsValidating,
-    mutate: feelingsMutate,
-  } = useSWR<GetFeelingsData>(
-    selectedDate && user?.uid
-      ? stringifyUrl({
-          query: {
-            "filters[date][$eq]": dayjs(selectedDate).format("YYYY-MM-DD"),
-            "filters[uid][$eq]": user.uid,
-          },
-          url: "/api/feelings",
-        })
-      : null
-  );
-  const [defaultValues, setDefaultValues] =
-    useState<NewPortalProps["defaultValues"]>();
-  const [activeStartDate, setActiveStartDate] = useState(
-    dayjs().startOf("month").toDate()
-  );
-  const { data: feelings2, mutate: feelings2Mutate } = useSWR<GetFeelingsData>(
-    user?.uid
-      ? stringifyUrl({
-          query: {
-            "filters[date][$between]": [
-              dayjs(activeStartDate).add(-6, "day").format("YYYY-MM-DD"),
-              dayjs(activeStartDate)
-                .endOf("month")
-                .add(6, "day")
-                .format("YYYY-MM-DD"),
-            ],
-            "filters[uid][$eq]": user.uid,
-          },
-          url: "/api/feelings",
-        })
-      : null
-  );
-  const { data: conditions2, mutate: conditions2Mutate } =
-    useSWR<GetConditionsData>(
-      user?.uid
-        ? stringifyUrl({
-            query: {
-              "filters[date][$between]": [
-                dayjs(activeStartDate).add(-6, "day").format("YYYY-MM-DD"),
-                dayjs(activeStartDate)
-                  .endOf("month")
-                  .add(6, "day")
-                  .format("YYYY-MM-DD"),
-              ],
-              "filters[uid][$eq]": user.uid,
-            },
-            url: "/api/conditions",
-          })
-        : null
-    );
-  const handleSubmit = useCallback<NewPortalProps["onSubmit"]>(
-    async ({ condition, feeling }) => {
-      if (!user?.uid || !condition || !feeling || !selectedDate) {
+  const handleClickDay = useCallback<NonNullable<TopProps["onClickDay"]>>(
+    (date) => {
+      if (dayjs(date).isAfter(dayjs())) {
+        toast.error("未来の調子はまだ入力できません");
+
         return;
       }
 
+      offIsFirst();
+
+      setSelectedDate(date);
+    },
+    [offIsFirst]
+  );
+  const handleSwipedLeft = useCallback<TopProps["onSwipedLeft"]>(() => {
+    setActiveStartDate((prevActiveStartDate) =>
+      dayjs(prevActiveStartDate).add(1, "month").toDate()
+    );
+  }, []);
+  const handleSwipedRight = useCallback<TopProps["onSwipedRight"]>(() => {
+    setActiveStartDate((prevActiveStartDate) =>
+      dayjs(prevActiveStartDate).add(-1, "month").toDate()
+    );
+  }, []);
+  const [toastId, setToastId] = useState("");
+  const [defaultValues, setDefaultValues] =
+    useState<FormPortalProps["defaultValues"]>();
+  const params = useMemo(
+    () => ({
+      date: selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : "",
+    }),
+    [selectedDate]
+  );
+  const { conditions, conditionsMutate } = useConditions(params);
+  const { feelings, feelingsMutate } = useFeelings(params);
+  const isOpen = useMemo(
+    () => !!defaultValues && !!selectedDate,
+    [defaultValues, selectedDate]
+  );
+  const handleClose = useCallback<FormPortalProps["onClose"]>(() => {
+    setSelectedDate(undefined);
+  }, []);
+  const { user } = useUser();
+  const query = useMemo(
+    () => ({
+      date: [
+        dayjs(activeStartDate).add(-6, "day").format("YYYY-MM-DD"),
+        dayjs(activeStartDate)
+          .endOf("month")
+          .add(6, "day")
+          .format("YYYY-MM-DD"),
+      ],
+    }),
+    [activeStartDate]
+  );
+  const { conditionsMutate: conditionsMutate2 } = useConditions(query);
+  const { feelingsMutate: feelingsMutate2 } = useFeelings(query);
+  const handleSubmit = useCallback<FormPortalProps["onSubmit"]>(
+    async ({ condition, feeling }) => {
+      if (!condition || !feeling || !user) {
+        return;
+      }
+
+      const { uid } = user;
+      const conditionData = {
+        ...params,
+        uid,
+        value: condition,
+      };
+      const feelingData = {
+        uid,
+        ...params,
+        value: feeling,
+      };
       const myPromise = Promise.all([
-        (conditions?.data && conditions?.data.length
+        (conditions && conditions.data && conditions.data.length
           ? axios.put<
               PutConditionsIdData,
               AxiosResponse<PutConditionsIdData>,
               PutConditionsIdBody
             >(`/api/conditions/${conditions.data[0].id}`, {
-              data: {
-                date: dayjs(selectedDate).format("YYYY-MM-DD"),
-                uid: user.uid,
-                value: condition,
-              },
+              data: conditionData,
             })
           : axios.post<
               PostConditionsData,
               AxiosResponse<PostConditionsData>,
               PostConditionsBody
             >("/api/conditions", {
-              data: {
-                date: dayjs(selectedDate).format("YYYY-MM-DD"),
-                uid: user.uid,
-                value: condition,
-              },
+              data: conditionData,
             })
-        ).then(async () => {
-          await Promise.all([conditionsMutate(), conditions2Mutate()]);
+        ).then(() => {
+          conditionsMutate();
+          conditionsMutate2();
         }),
-        (feelings?.data && feelings?.data.length
+        (feelings && feelings.data && feelings.data.length
           ? axios.put<
               PutFeelingsIdData,
               AxiosResponse<PutFeelingsIdData>,
               PutFeelingsIdBody
             >(`/api/feelings/${feelings.data[0].id}`, {
-              data: {
-                date: dayjs(selectedDate).format("YYYY-MM-DD"),
-                uid: user.uid,
-                value: feeling,
-              },
+              data: feelingData,
             })
           : axios.post<
               PostFeelingsData,
               AxiosResponse<PostFeelingsData>,
               PostFeelingsBody
             >("/api/feelings", {
-              data: {
-                date: dayjs(selectedDate).format("YYYY-MM-DD"),
-                uid: user.uid,
-                value: feeling,
-              },
+              data: feelingData,
             })
-        ).then(async () => {
-          await Promise.all([feelingsMutate(), feelings2Mutate()]);
+        ).then(() => {
+          feelingsMutate();
+          feelingsMutate2();
         }),
       ]);
 
@@ -180,94 +164,45 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       setSelectedDate(undefined);
     },
     [
-      conditions?.data,
-      conditions2Mutate,
+      conditions,
       conditionsMutate,
-      feelings?.data,
-      feelings2Mutate,
+      conditionsMutate2,
+      feelings,
       feelingsMutate,
-      selectedDate,
-      user?.uid,
+      feelingsMutate2,
+      params,
+      user,
     ]
   );
-  const [toastId, setToastId] = useState("");
-  const isOpen = useMemo(
-    () => !!defaultValues && !!selectedDate,
-    [defaultValues, selectedDate]
-  );
-  const handleClose = useCallback(() => {
-    setSelectedDate(undefined);
-  }, []);
-  const { setFalse: onIsFalse, value: isFirst } = useBoolean(true);
-  const handleClickDay = useCallback<NonNullable<TopProps["onClickDay"]>>(
-    (date) => {
-      if (dayjs(date).isAfter(dayjs())) {
-        toast.error("未来の調子はまだ入力できません");
-
-        return;
-      }
-
-      onIsFalse();
-
-      setSelectedDate(date);
-    },
-    [onIsFalse]
-  );
-  const handleActiveStartDateChange = useCallback<
-    NonNullable<TopProps["onActiveStartDateChange"]>
-  >(
-    ({ activeStartDate }) => {
-      setActiveStartDate(activeStartDate);
-    },
-    [setActiveStartDate]
-  );
-  const feelingsDates = useMemo<TopProps["feelingsDates"]>(
-    () =>
-      feelings2?.data
-        ? feelings2.data.map(({ attributes }) => ({
-            date: attributes?.date!,
-            value: attributes?.value!,
-          }))
-        : [],
-    [feelings2]
-  );
-  const conditionsDates = useMemo<TopProps["conditionsDates"]>(
-    () =>
-      conditions2?.data
-        ? conditions2.data.map(({ attributes }) => ({
-            date: attributes?.date!,
-            value: attributes?.value!,
-          }))
-        : [],
-    [conditions2]
-  );
-  const handleSwipedLeft = useCallback<TopProps["onSwipedLeft"]>(() => {
-    setActiveStartDate((prevActiveStartDate) =>
-      dayjs(prevActiveStartDate).add(1, "month").toDate()
-    );
-  }, []);
-  const handleSwipedRight = useCallback<TopProps["onSwipedRight"]>(() => {
-    setActiveStartDate((prevActiveStartDate) =>
-      dayjs(prevActiveStartDate).add(-1, "month").toDate()
-    );
-  }, []);
 
   useEffect(() => {
-    if (!conditionsIsValidating || !feelingsIsValidating) {
+    if (!isSignedIn) {
+      return;
+    }
+
+    const toastId = toast.loading("データを取得中です…");
+
+    setToastId(toastId);
+  }, [isSignedIn]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      return;
+    }
+
+    setDefaultValues(undefined);
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (!conditions || !feelings) {
       return;
     }
 
     toast.dismiss(toastId);
-  }, [
-    conditions,
-    conditionsIsValidating,
-    feelings,
-    feelingsIsValidating,
-    toastId,
-  ]);
+  }, [conditions, feelings, toastId]);
 
   useEffect(() => {
-    if (!conditions?.data || !feelings?.data) {
+    if (!conditions || !conditions.data || !feelings || !feelings.data) {
       return;
     }
 
@@ -288,33 +223,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       condition: conditions.data[0].attributes?.value || "",
       feeling: feelings.data[0].attributes?.value || "",
     });
-  }, [
-    conditions,
-    conditionsIsValidating,
-    feelings,
-    feelingsIsValidating,
-    isFirst,
-    selectedDate,
-    toastId,
-  ]);
-
-  useEffect(() => {
-    if (!isSignedIn) {
-      return;
-    }
-
-    const toastId = toast.loading("データを取得中です…");
-
-    setToastId(toastId);
-  }, [isSignedIn]);
-
-  useEffect(() => {
-    if (selectedDate) {
-      return;
-    }
-
-    setDefaultValues(undefined);
-  }, [selectedDate]);
+  }, [conditions, feelings, isFirst]);
 
   return (
     <>
@@ -323,16 +232,14 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
         <>
           <Top
             activeStartDate={activeStartDate}
-            conditionsDates={conditionsDates}
-            feelingsDates={feelingsDates}
-            isOpen={isOpen}
+            isOpen={false}
             onActiveStartDateChange={handleActiveStartDateChange}
             onClickDay={handleClickDay}
             onSwipedLeft={handleSwipedLeft}
             onSwipedRight={handleSwipedRight}
           />
           {defaultValues && isOpen ? (
-            <NewPortal
+            <FormPortal
               defaultValues={defaultValues}
               onClose={handleClose}
               onSubmit={handleSubmit}
@@ -340,9 +247,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
           ) : null}
         </>
       ) : (
-        <NoSSR>
-          <Landing />
-        </NoSSR>
+        <Landing />
       )}
     </>
   );

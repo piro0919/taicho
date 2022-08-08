@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
-import Image from "next/image";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import ReactCalendar, {
   CalendarProps as ReactCalendarProps,
 } from "react-calendar";
@@ -8,16 +7,10 @@ import { BsCaretLeftFill, BsCaretRightFill } from "react-icons/bs";
 import { SwipeCallback, useSwipeable } from "react-swipeable";
 import styles from "./style.module.scss";
 
-type DateType = {
-  date: string;
-  value: "excellent" | "veryGood" | "good" | "average" | "poor" | "";
-};
-
 export type CalendarProps = Pick<
   ReactCalendarProps,
-  "activeStartDate" | "onActiveStartDateChange" | "onClickDay"
+  "activeStartDate" | "onActiveStartDateChange" | "onClickDay" | "tileContent"
 > & {
-  dates: DateType[];
   name: string;
   onSwipedLeft: SwipeCallback;
   onSwipedRight: SwipeCallback;
@@ -25,12 +18,12 @@ export type CalendarProps = Pick<
 
 function Calendar({
   activeStartDate,
-  dates,
   name,
   onActiveStartDateChange,
   onClickDay,
   onSwipedLeft,
   onSwipedRight,
+  tileContent,
 }: CalendarProps): JSX.Element {
   const [value, onChange] = useState<ReactCalendarProps["value"]>(
     dayjs().toDate()
@@ -58,29 +51,7 @@ function Calendar({
         prev2Label={null}
         prevLabel={<BsCaretLeftFill size={16} />}
         tileClassName={styles.tile}
-        tileContent={({ date }): JSX.Element => {
-          if (!dates) {
-            return <Fragment />;
-          }
-
-          const foundDate = dates.find(({ date: dateDate }) =>
-            dayjs(date).isSame(dateDate, "date")
-          );
-
-          return foundDate?.value ? (
-            <div className={styles.imageWrapper}>
-              <Image
-                alt={foundDate.value}
-                layout="fill"
-                objectFit="contain"
-                priority={true}
-                src={`/${foundDate.value}.png`}
-              />
-            </div>
-          ) : (
-            <Fragment />
-          );
-        }}
+        tileContent={tileContent}
         value={value}
       />
     </div>

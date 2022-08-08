@@ -1,7 +1,7 @@
 import { FeelingRequest, FeelingListResponse } from "@taicho/api";
 import { AxiosResponse } from "axios";
-import fetchStrapi from "libs/fetchStrapi";
 import options from "libs/options";
+import strapi from "libs/strapi";
 import verifyIdTokenMiddleware from "libs/verifyIdTokenMiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
@@ -37,7 +37,7 @@ const handler = nc<
 >(options)
   .use(verifyIdTokenMiddleware)
   .get<ExtendedGetRequest, ExtendedGetResponse>(async ({ query }, res) => {
-    const { data: feelings } = await fetchStrapi.get<
+    const { data: feelings } = await strapi.get<
       GetFeelingsData,
       AxiosResponse<GetFeelingsData>
     >(
@@ -52,7 +52,7 @@ const handler = nc<
     res.end();
   })
   .post<ExtendedPostRequest, ExtendedPostResponse>(async ({ body }, res) => {
-    const { data: feelings } = await fetchStrapi.post<
+    const { data: feelings } = await strapi.post<
       PostFeelingsData,
       AxiosResponse<PostFeelingsData>,
       PostFeelingsBody

@@ -28,15 +28,11 @@ export type TopProps = Pick<
     | "onSwipedLeft"
     | "onSwipedRight"
   > & {
-    conditionsDates: ConditionsCalendarProps["dates"];
-    feelingsDates: FeelingsCalendarProps["dates"];
     isOpen: boolean;
   };
 
 function Top({
   activeStartDate,
-  conditionsDates,
-  feelingsDates,
   isOpen,
   onActiveStartDateChange,
   onClickDay,
@@ -54,7 +50,6 @@ function Top({
       <Content className={styles.content} value="FeelingsCalendar">
         <FeelingsCalendar
           activeStartDate={activeStartDate}
-          dates={feelingsDates}
           onActiveStartDateChange={onActiveStartDateChange}
           onClickDay={onClickDay}
           onSwipedLeft={onSwipedLeft}
@@ -64,7 +59,6 @@ function Top({
       <Content className={styles.content} value="ConditionsCalendar">
         <ConditionsCalendar
           activeStartDate={activeStartDate}
-          dates={conditionsDates}
           onActiveStartDateChange={onActiveStartDateChange}
           onClickDay={onClickDay}
           onSwipedLeft={onSwipedLeft}

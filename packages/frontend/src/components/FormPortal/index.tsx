@@ -12,17 +12,17 @@ type FieldValues = {
   feeling: "excellent" | "veryGood" | "good" | "average" | "poor" | "";
 };
 
-export type NewPortalProps = {
+export type FormPortalProps = {
   defaultValues: FieldValues;
   onClose: MouseEventHandler<HTMLButtonElement>;
   onSubmit: SubmitHandler<FieldValues>;
 };
 
-function NewPortal({
+function FormPortal({
   defaultValues,
   onClose,
   onSubmit,
-}: NewPortalProps): JSX.Element {
+}: FormPortalProps): JSX.Element {
   const { Portal } = usePortal({
     defaultShow: true,
   });
@@ -142,4 +142,4 @@ function NewPortal({
   );
 }
 
-export default NewPortal;
+export default FormPortal;

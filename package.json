@@ -32,7 +32,10 @@
   "name": "taicho_2",
   "private": true,
   "scripts": {
-    "lint": "npm-run-all --parallel lint:es lint:style",
+    "dev": "run-p dev:*",
+    "dev:backend": "npm run develop -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "lint": "run-p lint:es lint:style",
     "lint-staged": "npx lint-staged",
     "lint:es": "eslint packages --ext .ts,.tsx --fix",
     "lint:next": "next lint --fix",

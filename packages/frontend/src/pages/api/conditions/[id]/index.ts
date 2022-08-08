@@ -1,7 +1,7 @@
 import { ConditionRequest, ConditionResponse } from "@taicho/api";
 import { AxiosResponse } from "axios";
-import fetchStrapi from "libs/fetchStrapi";
 import options from "libs/options";
+import strapi from "libs/strapi";
 import verifyIdTokenMiddleware from "libs/verifyIdTokenMiddleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
@@ -29,7 +29,7 @@ const handler = nc<NextApiRequest, NextApiResponse<ExtendedPutResponse>>(
   .use(verifyIdTokenMiddleware)
   .put<ExtendedPutRequest, ExtendedPutResponse>(
     async ({ body, query: { id } }, res) => {
-      const { data: conditions } = await fetchStrapi.put<
+      const { data: conditions } = await strapi.put<
         PutConditionsIdData,
         AxiosResponse<PutConditionsIdData>,
         PutConditionsIdBody
