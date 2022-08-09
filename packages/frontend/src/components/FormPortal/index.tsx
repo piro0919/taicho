@@ -1,7 +1,8 @@
 import { Root, Item, Indicator } from "@radix-ui/react-radio-group";
 import Button from "components/Button";
+import dayjs from "dayjs";
 import Image from "next/image";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useMemo } from "react";
 import usePortal from "react-cool-portal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
@@ -16,12 +17,14 @@ export type FormPortalProps = {
   defaultValues: FieldValues;
   onClose: MouseEventHandler<HTMLButtonElement>;
   onSubmit: SubmitHandler<FieldValues>;
+  selectedDate: Date;
 };
 
 function FormPortal({
   defaultValues,
   onClose,
   onSubmit,
+  selectedDate,
 }: FormPortalProps): JSX.Element {
   const { Portal } = usePortal({
     defaultShow: true,
@@ -35,6 +38,16 @@ function FormPortal({
   } = useForm<FieldValues>({
     defaultValues,
   });
+  const dateText = useMemo(() => {
+    if (dayjs(selectedDate).isSame(dayjs(), "date")) {
+      return "今日";
+    }
+    if (dayjs(selectedDate).isSame(dayjs().add(-1, "day"), "date")) {
+      return "昨日";
+    }
+
+    return dayjs(selectedDate).format("M月 D日");
+  }, [selectedDate]);
 
   return (
     <Portal>
@@ -42,7 +55,7 @@ function FormPortal({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className={styles.fieldsetsWrapper}>
             <fieldset className={styles.fieldset}>
-              <legend className={styles.legend}>今日の気分</legend>
+              <legend className={styles.legend}>{`${dateText}の気分`}</legend>
               <Root
                 className={styles.root}
                 name="feeling"
@@ -86,7 +99,7 @@ function FormPortal({
               </Root>
             </fieldset>
             <fieldset className={styles.fieldset}>
-              <legend className={styles.legend}>今日の体調</legend>
+              <legend className={styles.legend}>{`${dateText}の体調`}</legend>
               <Root
                 className={styles.root}
                 name="condition"

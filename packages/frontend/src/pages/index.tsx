@@ -238,11 +238,12 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
             onSwipedLeft={handleSwipedLeft}
             onSwipedRight={handleSwipedRight}
           />
-          {defaultValues && isOpen ? (
+          {defaultValues && isOpen && selectedDate ? (
             <FormPortal
               defaultValues={defaultValues}
               onClose={handleClose}
               onSubmit={handleSubmit}
+              selectedDate={selectedDate}
             />
           ) : null}
         </>

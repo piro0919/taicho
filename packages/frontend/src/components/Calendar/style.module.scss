@@ -36,7 +36,7 @@
 }
 
 .calendar :global(.react-calendar__month-view__weekdays__weekday) {
-  border-left: 1px solid #dadce0;
+  border-left: 1px solid var(--color-gray);
 }
 
 .calendar :global(.react-calendar__navigation__arrow):focus {
@@ -57,11 +57,11 @@
 }
 
 .calendar :global(.react-calendar__tile--now) abbr {
-  color: #fff;
+  color: var(--color-white);
 }
 
 .calendar :global(.react-calendar__tile--now) abbr::before {
-  background: #00a387;
+  background: var(--color-green);
   border-radius: 100vmax;
   content: "";
   display: block;
@@ -81,7 +81,7 @@
 .tile:focus,
 .tile:hover {
   background: transparent !important;
-  border-left: 1px solid #dadce0 !important;
-  border-top: 1px solid #dadce0 !important;
+  border-left: 1px solid var(--color-gray) !important;
+  border-top: 1px solid var(--color-gray) !important;
   color: inherit !important;
 }
