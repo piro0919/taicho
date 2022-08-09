@@ -46,6 +46,16 @@
   }
 }
 
+.textareaWrapper {
+  padding: 0 0 12px;
+  width: 100%;
+}
+
+.textarea {
+  resize: none;
+  width: 100%;
+}
+
 .root {
   display: flex;
   gap: 12px;

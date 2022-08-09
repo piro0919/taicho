@@ -6,11 +6,13 @@ import { MouseEventHandler, useMemo } from "react";
 import usePortal from "react-cool-portal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
+import TextareaAutosize from "react-textarea-autosize";
 import styles from "./style.module.scss";
 
 type FieldValues = {
   condition: "good" | "average" | "poor" | "";
   feeling: "excellent" | "veryGood" | "good" | "average" | "poor" | "";
+  remark: string;
 };
 
 export type FormPortalProps = {
@@ -137,6 +139,16 @@ function FormPortal({
                   </label>
                 ))}
               </Root>
+            </fieldset>
+            <fieldset className={styles.fieldset}>
+              <legend className={styles.legend}>{`${dateText}のメモ`}</legend>
+              <div className={styles.textareaWrapper}>
+                <TextareaAutosize
+                  {...register("remark")}
+                  className={styles.textarea}
+                  maxRows={8}
+                />
+              </div>
             </fieldset>
           </div>
           <div className={styles.buttonWrapper}>

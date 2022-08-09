@@ -23,6 +23,7 @@
     "react-social-login-buttons": "3.6.1",
     "react-spinners": "0.13.4",
     "react-swipeable": "7.0.0",
+    "react-textarea-autosize": "8.3.4",
     "ress": "5.0.2",
     "sass": "1.54.3",
     "sass-mq": "6.0.0",
