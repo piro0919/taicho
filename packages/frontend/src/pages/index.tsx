@@ -64,7 +64,8 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       dayjs(prevActiveStartDate).add(-1, "month").toDate()
     );
   }, []);
-  const [toastId, setToastId] = useState("");
+  // const [toastId, setToastId] = useState("");
+  const [toastId] = useState("");
   const [defaultValues, setDefaultValues] =
     useState<FormPortalProps["defaultValues"]>();
   const params = useMemo(
@@ -180,9 +181,10 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       return;
     }
 
-    const toastId = toast.loading("データを取得中です…");
+    // TODO: SWRConfig に localStorageProvider を渡すと DOM が残るようになる
+    // const toastId = toast.loading("データを取得中です…");
 
-    setToastId(toastId);
+    // setToastId(toastId);
   }, [isSignedIn]);
 
   useEffect(() => {
@@ -194,7 +196,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (!conditions || !feelings) {
+    if (!conditions || !feelings || !toastId) {
       return;
     }
 
