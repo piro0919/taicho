@@ -64,8 +64,8 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       dayjs(prevActiveStartDate).add(-1, "month").toDate()
     );
   }, []);
-  // const [toastId, setToastId] = useState("");
-  const [toastId] = useState("");
+  const [toastId, setToastId] = useState("");
+  // const [toastId] = useState("");
   const [defaultValues, setDefaultValues] =
     useState<FormPortalProps["defaultValues"]>();
   const params = useMemo(
@@ -182,9 +182,9 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
     }
 
     // TODO: SWRConfig に localStorageProvider を渡すと DOM が残るようになる
-    // const toastId = toast.loading("データを取得中です…");
+    const toastId = toast.loading("データを取得中です…");
 
-    // setToastId(toastId);
+    setToastId(toastId);
   }, [isSignedIn]);
 
   useEffect(() => {

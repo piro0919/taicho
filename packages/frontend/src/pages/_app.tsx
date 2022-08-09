@@ -4,7 +4,6 @@ import UserCredentialContext from "contexts/UserCredentialContext";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import fetcher from "libs/fetcher";
-import localStorageProvider from "libs/localStorageProvider";
 import { NextPage } from "next";
 import { useInitAuth } from "next-firebase-authentication";
 import type { AppProps } from "next/app";
@@ -52,8 +51,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
       <SWRConfig
         value={{
           fetcher,
-          provider:
-            typeof window === "undefined" ? undefined : localStorageProvider,
+          // provider:
+          //   typeof window === "undefined" ? undefined : localStorageProvider,
           revalidateIfStale: false,
           revalidateOnFocus: false,
         }}
