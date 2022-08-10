@@ -45,7 +45,8 @@
     "build": "next build",
     "dev": "next dev",
     "postbuild": "next-sitemap",
-    "start": "next start"
+    "start": "next start",
+    "type-check": "tsc --noemit"
   },
   "version": "0.1.0"
 }
