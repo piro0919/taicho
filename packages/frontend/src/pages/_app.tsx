@@ -78,7 +78,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
         hideProgressBar={true}
         pauseOnHover={false}
         position="bottom-center"
-        style={{ width: "340px" }}
+        style={{ fontSize: "14px" }}
       />
     </>
   );
