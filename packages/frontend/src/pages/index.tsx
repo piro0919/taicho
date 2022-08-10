@@ -72,7 +72,6 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
     );
   }, []);
   const [toastId, setToastId] = useState<Id>();
-  // const [toastId] = useState("");
   const [defaultValues, setDefaultValues] =
     useState<FormPortalProps["defaultValues"]>();
   const params = useMemo(
@@ -215,7 +214,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
   );
 
   useEffect(() => {
-    if (!isSignedIn) {
+    if (!isFirst || !isSignedIn) {
       return;
     }
 
@@ -224,7 +223,27 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
     setTimeout(() => {
       setToastId(toastId);
     }, 1000);
-  }, [isSignedIn]);
+  }, [isFirst, isSignedIn]);
+
+  useEffect(() => {
+    if (isFirst) {
+      return;
+    }
+
+    if (selectedDate && !defaultValues && !toastId) {
+      const toastId = toast.loading("データを取得中です…");
+
+      setToastId(toastId);
+
+      return;
+    }
+
+    if (selectedDate && defaultValues && toastId) {
+      setToastId(undefined);
+
+      toast.dismiss(toastId);
+    }
+  }, [defaultValues, isFirst, selectedDate, toastId]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -239,6 +258,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       return;
     }
 
+    setToastId(undefined);
     toast.dismiss(toastId);
   }, [conditions, feelings, toastId]);
 

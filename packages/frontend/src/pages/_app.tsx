@@ -10,7 +10,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ReactElement, ReactNode } from "react";
 import "react-calendar/dist/Calendar.css";
-import { ToastContainer } from "react-toastify";
+import { Flip, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "ress";
 import "styles/globals.scss";
@@ -79,6 +79,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
         pauseOnHover={false}
         position="bottom-center"
         style={{ fontSize: "14px" }}
+        transition={Flip}
       />
     </>
   );
