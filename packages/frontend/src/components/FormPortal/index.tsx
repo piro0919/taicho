@@ -32,7 +32,7 @@ function FormPortal({
     defaultShow: true,
   });
   const {
-    formState: { isSubmitting, isValid },
+    formState: { isDirty, isSubmitting, isValid },
     handleSubmit,
     register,
     setValue,
@@ -152,7 +152,10 @@ function FormPortal({
             </fieldset>
           </div>
           <div className={styles.buttonWrapper}>
-            <Button disabled={!isValid || isSubmitting} type="submit">
+            <Button
+              disabled={!isDirty || !isValid || isSubmitting}
+              type="submit"
+            >
               保存する
             </Button>
           </div>

@@ -11,7 +11,7 @@ import { GetServerSideProps } from "next";
 import { useUser } from "next-firebase-authentication";
 import { verifyIdToken } from "next-firebase-authentication/dist/verifyIdToken";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import toast from "react-hot-toast";
+import { Id, toast } from "react-toastify";
 import { useBoolean } from "usehooks-ts";
 import { PostConditionsData, PostConditionsBody } from "./api/conditions";
 import {
@@ -71,7 +71,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       dayjs(prevActiveStartDate).add(-1, "month").toDate()
     );
   }, []);
-  const [toastId, setToastId] = useState("");
+  const [toastId, setToastId] = useState<Id>();
   // const [toastId] = useState("");
   const [defaultValues, setDefaultValues] =
     useState<FormPortalProps["defaultValues"]>();
@@ -194,7 +194,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
 
       await toast.promise(myPromise, {
         error: "エラーが発生しました…",
-        loading: "保存中です…",
+        pending: "保存中です…",
         success: "保存しました！",
       });
 
@@ -219,10 +219,11 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       return;
     }
 
-    // TODO: SWRConfig に localStorageProvider を渡すと DOM が残るようになる
     const toastId = toast.loading("データを取得中です…");
 
-    setToastId(toastId);
+    setTimeout(() => {
+      setToastId(toastId);
+    }, 1000);
   }, [isSignedIn]);
 
   useEffect(() => {

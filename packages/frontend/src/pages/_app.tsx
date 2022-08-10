@@ -1,16 +1,17 @@
-import NoSSR from "@mpth/react-no-ssr";
 import PwaContext from "contexts/PwaContext";
 import UserCredentialContext from "contexts/UserCredentialContext";
 import dayjs from "dayjs";
 import "dayjs/locale/ja";
 import fetcher from "libs/fetcher";
+import localStorageProvider from "libs/localStorageProvider";
 import { NextPage } from "next";
 import { useInitAuth } from "next-firebase-authentication";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ReactElement, ReactNode } from "react";
 import "react-calendar/dist/Calendar.css";
-import { Toaster } from "react-hot-toast";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "ress";
 import "styles/globals.scss";
 import "styles/mq-settings.scss";
@@ -51,8 +52,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
       <SWRConfig
         value={{
           fetcher,
-          // provider:
-          //   typeof window === "undefined" ? undefined : localStorageProvider,
+          provider:
+            typeof window === "undefined" ? undefined : localStorageProvider,
           revalidateIfStale: false,
           revalidateOnFocus: false,
         }}
@@ -71,9 +72,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout): JSX.Element {
           </UserCredentialContext.Provider>
         </PwaContext.Provider>
       </SWRConfig>
-      <NoSSR>
-        <Toaster position="bottom-center" />
-      </NoSSR>
+      <ToastContainer
+        autoClose={2000}
+        closeButton={false}
+        hideProgressBar={true}
+        pauseOnHover={false}
+        position="bottom-center"
+        style={{ width: "340px" }}
+      />
     </>
   );
 }
