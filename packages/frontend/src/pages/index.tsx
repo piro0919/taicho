@@ -5,8 +5,6 @@ import Seo from "components/Seo";
 import Top, { TopProps } from "components/Top";
 import dayjs from "dayjs";
 import useConditions from "hooks/useConditions";
-import useFeelings from "hooks/useFeelings";
-import useRemarks from "hooks/useRemarks";
 import { GetServerSideProps } from "next";
 import { useUser } from "next-firebase-authentication";
 import { verifyIdToken } from "next-firebase-authentication/dist/verifyIdToken";
@@ -18,14 +16,6 @@ import {
   PutConditionsIdData,
   PutConditionsIdBody,
 } from "./api/conditions/[id]";
-import { PostFeelingsData, PostFeelingsBody } from "./api/feelings";
-import { PutFeelingsIdData, PutFeelingsIdBody } from "./api/feelings/[id]";
-import { PostRemarksData, PostRemarksBody } from "./api/remarks";
-import {
-  PutRemarksIdData,
-  PutRemarksIdBody,
-  DeleteRemarksIdData,
-} from "./api/remarks/[id]";
 
 export type PagesProps = {
   isSignedIn: boolean;
@@ -81,8 +71,6 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
     [selectedDate]
   );
   const { conditions, conditionsMutate } = useConditions(params);
-  const { feelings, feelingsMutate } = useFeelings(params);
-  const { remarks, remarksMutate } = useRemarks(params);
   const isOpen = useMemo(
     () => !!defaultValues && !!selectedDate,
     [defaultValues, selectedDate]
@@ -104,7 +92,6 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
     [activeStartDate]
   );
   const { conditionsMutate: conditionsMutate2 } = useConditions(query);
-  const { feelingsMutate: feelingsMutate2 } = useFeelings(query);
   const handleSubmit = useCallback<FormPortalProps["onSubmit"]>(
     async ({ condition, feeling, remark }) => {
       if (!condition || !feeling || !user) {
@@ -114,18 +101,10 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
       const { uid } = user;
       const conditionData = {
         ...params,
+        feeling,
+        remark,
         uid,
-        value: condition,
-      };
-      const feelingData = {
-        uid,
-        ...params,
-        value: feeling,
-      };
-      const remarkData = {
-        uid,
-        ...params,
-        value: remark,
+        physicalCondition: condition,
       };
       const myPromise = Promise.all([
         (conditions && conditions.data && conditions.data.length
@@ -147,48 +126,6 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
           conditionsMutate();
           conditionsMutate2();
         }),
-        (feelings && feelings.data && feelings.data.length
-          ? axios.put<
-              PutFeelingsIdData,
-              AxiosResponse<PutFeelingsIdData>,
-              PutFeelingsIdBody
-            >(`/api/feelings/${feelings.data[0].id}`, {
-              data: feelingData,
-            })
-          : axios.post<
-              PostFeelingsData,
-              AxiosResponse<PostFeelingsData>,
-              PostFeelingsBody
-            >("/api/feelings", {
-              data: feelingData,
-            })
-        ).then(() => {
-          feelingsMutate();
-          feelingsMutate2();
-        }),
-        (remarks && remarks.data && remarks.data.length
-          ? remark
-            ? axios.put<
-                PutRemarksIdData,
-                AxiosResponse<PutRemarksIdData>,
-                PutRemarksIdBody
-              >(`/api/remarks/${remarks.data[0].id}`, {
-                data: remarkData,
-              })
-            : axios.delete<
-                DeleteRemarksIdData,
-                AxiosResponse<DeleteRemarksIdData>
-              >(`/api/remarks/${remarks.data[0].id}`)
-          : axios.post<
-              PostRemarksData,
-              AxiosResponse<PostRemarksData>,
-              PostRemarksBody
-            >("/api/remarks", {
-              data: remarkData,
-            })
-        ).then(() => {
-          remarksMutate();
-        }),
       ]);
 
       await toast.promise(myPromise, {
@@ -199,18 +136,7 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
 
       setSelectedDate(undefined);
     },
-    [
-      conditions,
-      conditionsMutate,
-      conditionsMutate2,
-      feelings,
-      feelingsMutate,
-      feelingsMutate2,
-      params,
-      remarks,
-      remarksMutate,
-      user,
-    ]
+    [conditions, conditionsMutate, conditionsMutate2, params, user]
   );
 
   useEffect(() => {
@@ -254,27 +180,20 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
   }, [selectedDate]);
 
   useEffect(() => {
-    if (!conditions || !feelings || !toastId) {
+    if (!conditions || !toastId) {
       return;
     }
 
     setToastId(undefined);
     toast.dismiss(toastId);
-  }, [conditions, feelings, toastId]);
+  }, [conditions, toastId]);
 
   useEffect(() => {
-    if (
-      !conditions ||
-      !conditions.data ||
-      !feelings ||
-      !feelings.data ||
-      !remarks ||
-      !remarks.data
-    ) {
+    if (!conditions || !conditions.data) {
       return;
     }
 
-    if (!conditions.data.length || !feelings.data.length) {
+    if (!conditions.data.length) {
       setDefaultValues({
         condition: "",
         feeling: "",
@@ -289,11 +208,12 @@ function Pages({ isSignedIn }: PagesProps): JSX.Element {
     }
 
     setDefaultValues({
-      condition: conditions.data[0].attributes?.value || "",
-      feeling: feelings.data[0].attributes?.value || "",
-      remark: (remarks.data.length && remarks.data[0].attributes?.value) || "",
+      condition: conditions.data[0].attributes?.physicalCondition || "",
+      feeling: conditions.data[0].attributes?.feeling || "",
+      remark:
+        (conditions.data.length && conditions.data[0].attributes?.remark) || "",
     });
-  }, [conditions, feelings, isFirst, remarks]);
+  }, [conditions, isFirst]);
 
   return (
     <>

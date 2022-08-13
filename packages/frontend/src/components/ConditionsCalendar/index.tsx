@@ -40,10 +40,10 @@ function ConditionsCalendar({
           attributes?.date && dayjs(date).isSame(attributes.date, "date")
       );
 
-      return foundDate?.attributes?.value ? (
+      return foundDate?.attributes?.physicalCondition ? (
         <ImageTile
-          alt={foundDate.attributes.value}
-          src={`/${foundDate.attributes.value}.png`}
+          alt={foundDate.attributes.physicalCondition}
+          src={`/${foundDate.attributes.physicalCondition}.png`}
         />
       ) : null;
     },

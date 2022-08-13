@@ -2,7 +2,7 @@ import NoSSR from "@mpth/react-no-ssr";
 import Calendar, { CalendarProps } from "components/Calendar";
 import ImageTile from "components/ImageTile";
 import dayjs from "dayjs";
-import useFeelings from "hooks/useFeelings";
+import useConditions from "hooks/useConditions";
 import { useCallback } from "react";
 
 export type FeelingsCalendarProps = Pick<
@@ -21,7 +21,7 @@ function FeelingsCalendar({
   onSwipedLeft,
   onSwipedRight,
 }: FeelingsCalendarProps): JSX.Element {
-  const { feelings } = useFeelings({
+  const { conditions } = useConditions({
     date: [
       dayjs(activeStartDate).add(-6, "day").format("YYYY-MM-DD"),
       dayjs(activeStartDate).endOf("month").add(6, "day").format("YYYY-MM-DD"),
@@ -31,23 +31,23 @@ function FeelingsCalendar({
     ({ date }: { date: Date }) => JSX.Element | null
   >(
     ({ date }) => {
-      if (!feelings || !feelings.data) {
+      if (!conditions || !conditions.data) {
         return null;
       }
 
-      const foundDate = feelings.data.find(
+      const foundDate = conditions.data.find(
         ({ attributes }) =>
           attributes?.date && dayjs(date).isSame(attributes.date, "date")
       );
 
-      return foundDate?.attributes?.value ? (
+      return foundDate?.attributes?.feeling ? (
         <ImageTile
-          alt={foundDate.attributes.value}
-          src={`/${foundDate.attributes.value}.png`}
+          alt={foundDate.attributes.feeling}
+          src={`/${foundDate.attributes.feeling}.png`}
         />
       ) : null;
     },
-    [feelings]
+    [conditions]
   );
 
   return (
