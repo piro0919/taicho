@@ -7,7 +7,7 @@
     "@strapi/plugin-i18n": "4.4.5",
     "@strapi/plugin-users-permissions": "4.4.5",
     "@strapi/strapi": "4.4.5",
-    "better-sqlite3": "7.6.2",
+    "better-sqlite3": "8.7.0",
     "pg": "8.8.0",
     "pg-connection-string": "2.5.0"
   },
