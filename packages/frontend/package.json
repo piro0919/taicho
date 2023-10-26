@@ -5,7 +5,7 @@
     "@radix-ui/react-tabs": "1.0.1",
     "@taicho/api": "../backend/",
     "@vespaiach/axios-fetch-adapter": "0.3.1",
-    "axios": "0.27.2",
+    "axios": "1.6.0",
     "dayjs": "1.11.6",
     "next": "12.3.1",
     "next-connect": "0.13.0",
